@@ -1,6 +1,6 @@
 SERVER = nfs_server
 
-SOURCES = nfs_svc.cc nfs_xdr.cc nfs_server.cc
+SOURCES = nfs_svc.cc nfs_xdr.cc $(shell find core -name "*.cc")
 
 # Compiler flags
 CXX = g++
@@ -14,7 +14,7 @@ TARGETS = $(SOURCES:.cc=.o)
 all: $(SERVER)
 
 %.o : %.cc
-	$(CXX) -c $(CXXFLAGS) $<
+	$(CXX) -o $@ -c $< $(CXXFLAGS) 
 
 
 $(SERVER) : $(TARGETS)
