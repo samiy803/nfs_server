@@ -14,9 +14,6 @@
 #include <netdb.h>
 #include <signal.h>
 #include <sys/ttycom.h>
-#ifdef __cplusplus
-#include <sysent.h>
-#endif /* __cplusplus */
 #include <memory.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -403,10 +400,10 @@ main( int argc, char* argv[] )
 	int sock;
 	int proto = 0;
 	struct sockaddr_in saddr;
-	int asize = sizeof (saddr);
+	socklen_t asize = sizeof (saddr);
 
 	if (getsockname(0, (struct sockaddr *)&saddr, &asize) == 0) {
-		int ssize = sizeof (int);
+	  socklen_t ssize = sizeof (int);
 
 		if (saddr.sin_family != AF_INET)
 			exit(1);
@@ -454,7 +451,7 @@ main( int argc, char* argv[] )
 		}
 		if (!_rpcpmstart)
 			proto = IPPROTO_UDP;
-		if (!svc_register(transp, NFS_PROGRAM, NFS_V3, nfs_program_3, proto)) {
+		if (!svc_register(transp, NFS_PROGRAM, NFS_V3, (void (*)())nfs_program_3, proto)) {
 			_msgout("unable to register (NFS_PROGRAM, NFS_V3, udp).");
 			exit(1);
 		}
@@ -471,7 +468,7 @@ main( int argc, char* argv[] )
 		}
 		if (!_rpcpmstart)
 			proto = IPPROTO_TCP;
-		if (!svc_register(transp, NFS_PROGRAM, NFS_V3, nfs_program_3, proto)) {
+		if (!svc_register(transp, NFS_PROGRAM, NFS_V3, (void (*)())nfs_program_3, proto)) {
 			_msgout("unable to register (NFS_PROGRAM, NFS_V3, tcp).");
 			exit(1);
 		}

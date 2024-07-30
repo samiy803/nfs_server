@@ -1,24 +1,24 @@
 SERVER = nfs_server
 
-SOURCES.x = nfs.x
-
-TARGETS = nfs.h nfs_xdr.c nfs_svc.c
+SOURCES = nfs_svc.cc nfs_xdr.cc nfs_server.cc
 
 # Compiler flags
-CC = gcc
-CFLAGS += -g
+CXX = g++
+CXXFLAGS += -g
 LDLIBS += 
-RPCGENFLAGS = -N -C
 
 # Targets
+TARGETS = $(SOURCES:.cc=.o)
 
-all : $(CLIENT) $(SERVER)
+# Rules
+all: $(SERVER)
 
-$(TARGETS) : $(SOURCES.x)
-	rpcgen $(RPCGENFLAGS) $(SOURCES.x)
+%.o : %.cc
+	$(CXX) -c $(CXXFLAGS) $<
+
 
 $(SERVER) : $(TARGETS)
-	$(CC) -o $(SERVER) $(CFLAGS) nfs_svc.c nfs_xdr.c $(SERVER).c $(LDLIBS)
+	$(CXX) -o $@ $^ $(LDLIBS)
 
  clean:
-		$(RM) -rf $(CLIENT) $(SERVER) $(TARGETS) *.dSYM
+		$(RM) -rf $(TARGETS) $(SERVER) *~ *.dSYM

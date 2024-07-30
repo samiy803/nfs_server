@@ -27,7 +27,7 @@ bool_t
 xdr_uint32(XDR *xdrs, uint32 *objp)
 {
 
-	if (!xdr_u_long(xdrs, objp))
+	if (!xdr_u_long(xdrs, (unsigned int *) objp))
 		return (FALSE);
 	return (TRUE);
 }
@@ -36,7 +36,7 @@ bool_t
 xdr_int32(XDR *xdrs, int32 *objp)
 {
 
-	if (!xdr_long(xdrs, objp))
+	if (!xdr_long(xdrs, (int *) objp))
 		return (FALSE);
 	return (TRUE);
 }
